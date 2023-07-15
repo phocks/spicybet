@@ -12,16 +12,15 @@
   } from "firebase/database";
 
   import { initializeApp } from "firebase/app";
-
-  import { app } from "../stores/app";
+  import { setApp } from "../stores/app";
 
   const firebaseConfig = {
     databaseURL:
       "https://spicybet-99ed9-default-rtdb.asia-southeast1.firebasedatabase.app/",
   };
 
-  const appInit = initializeApp(firebaseConfig);
-  app.set(appInit);
+  const firebaseApp = initializeApp(firebaseConfig);
+  setApp(firebaseApp);
 
   function initMatch(matchId: string) {
     const db = getDatabase();
