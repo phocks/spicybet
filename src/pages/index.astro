@@ -3,9 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import App from "../components/App.svelte";
 import BetCounter from "../components/BetCounter.svelte";
+import ResetButton from "../components/ResetButton.svelte";
 ---
-
-
 
 <App client:idle />
 
@@ -16,7 +15,7 @@ import BetCounter from "../components/BetCounter.svelte";
       Apha version of SpicyBet. <strong>Use at your own risk.</strong>
     </p>
 
-    <BetCounter client:idle />
+    <BetCounter client:idle /> <ResetButton client:idle />
 
     <!-- <ul role="list" class="link-card-grid">
       <Card
