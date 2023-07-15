@@ -13,6 +13,8 @@
   "dependencies": {
     "@astrojs/svelte": "^3.1.0",
     "astro": "^2.8.2",
+    "firebase": "^10.0.0",
+    "nanostores": "^0.9.3",
     "sass": "^1.63.6",
     "svelte": "^4.0.5"
   }
