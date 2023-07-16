@@ -29,6 +29,8 @@ export const getFirebaseDatabase = async (matchId) => {
   const initialData = {
     id: matchId,
     round: 1,
+    player1Guess: "none",
+    player2Guess: "none",
   };
 
   const createInitialData = async (matchId: string) => {
@@ -49,10 +51,18 @@ export const getFirebaseDatabase = async (matchId) => {
     console.log("Data exists. Checking if consistent...");
     const matchData = snapshot.val();
     await match(matchData)
-      .with({ id: P.string, round: P.number }, (data) => {
-        console.log("Data is consistent");
-        return data;
-      })
+      .with(
+        {
+          id: P.string,
+          round: P.number,
+          player1Guess: P.string,
+          player2Guess: P.string,
+        },
+        (data) => {
+          console.log("Data is consistent");
+          return data;
+        }
+      )
       .otherwise(async (data) => {
         console.log("Data is inconsistent, updating...");
         await createInitialData(matchId);
