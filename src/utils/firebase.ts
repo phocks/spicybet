@@ -31,6 +31,8 @@ export const getFirebaseDatabase = async (matchId) => {
     round: 1,
     player1Guess: "none",
     player2Guess: "none",
+    player1Score: 0,
+    player2Score: 0,
   };
 
   const createInitialData = async (matchId: string) => {
@@ -57,6 +59,8 @@ export const getFirebaseDatabase = async (matchId) => {
           round: P.number,
           player1Guess: P.string,
           player2Guess: P.string,
+          player1Score: P.number,
+          player2Score: P.number,
         },
         (data) => {
           console.log("Data is consistent");

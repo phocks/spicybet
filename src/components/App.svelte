@@ -14,7 +14,13 @@
     subscribeAll,
     choosePlayer1Color,
     choosePlayer2Color,
+    incrementPlayer1Score,
+    incrementPlayer2Score,
+    player1Score,
+    player2Score,
+    incrementRound,
   } from "@stores/firebase";
+  import { match } from "ts-pattern";
 
   // State
 
@@ -33,19 +39,41 @@
   function processWin(winner: string) {
     console.log("processWin", winner);
 
-    if (winner === "red") {
-      if ($player1Guess === "red") {
-        console.log("player 1 wins");
+    type Winner = "player1" | "player2" | "tie";
+
+    function whichPlayer(winner): Winner {
+      if ($player1Guess === $player2Guess) {
+        return "tie";
+      } else if (winner === "red") {
+        if ($player1Guess === "red") {
+          return "player1";
+        } else if ($player2Guess === "red") {
+          return "player2";
+        }
       } else {
-        console.log("player 2 wins");
-      }
-    } else {
-      if ($player2Guess === "blue") {
-        console.log("player 2 wins");
-      } else {
-        console.log("player 1 wins");
+        if ($player2Guess === "blue") {
+          return "player2";
+        } else if ($player1Guess === "blue") {
+          return "player1";
+        }
       }
     }
+
+    const winningPlayer = whichPlayer(winner);
+
+    match(winningPlayer)
+      .with("player1", () => {
+        incrementPlayer1Score(matchId);
+      })
+      .with("player2", () => {
+        incrementPlayer2Score(matchId);
+      })
+      .with("tie", () => {
+        console.log("tie");
+      })
+      .exhaustive();
+
+    incrementRound(matchId);
   }
 </script>
 
@@ -73,6 +101,9 @@
   <h3>Who won?</h3>
   <button on:click={() => processWin("red")}>Red</button>
   <button on:click={() => processWin("blue")}>Blue</button>
+
+  <h3>Player 1 score: {$player1Score}</h3>
+  <h3>Player 2 score: {$player2Score}</h3>
 </div>
 
 <style lang="scss">
