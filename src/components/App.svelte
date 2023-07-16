@@ -8,12 +8,19 @@
   // Local Imports
   import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
 
+  // State
+  let round = 0;
+
   onMount(async () => {
     console.log("mounted");
     const firebaseApp = getFirebaseApp();
     const result = await getFirebaseDatabase(matchId);
     console.log(result);
+
+    round = result.round;
   });
 </script>
 
-<div />
+<div>
+  <h2>Round {round}</h2>
+</div>
