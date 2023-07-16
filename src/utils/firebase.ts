@@ -48,13 +48,15 @@ export const getFirebaseDatabase = async (matchId) => {
   if (snapshot.exists()) {
     console.log("Data exists. Checking if consistent...");
     const matchData = snapshot.val();
-    match(matchData)
-      .with({ id: P.string, round: P.number }, () => {
+    await match(matchData)
+      .with({ id: P.string, round: P.number }, (data) => {
         console.log("Data is consistent");
+        return data;
       })
-      .otherwise(async () => {
+      .otherwise(async (data) => {
         console.log("Data is inconsistent, updating...");
         await createInitialData(matchId);
+        return data;
       });
 
     return matchData;
