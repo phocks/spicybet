@@ -1,3 +1,9 @@
+import { initializeApp } from "firebase/app";
+const firebaseConfig = {
+  databaseURL:
+    "https://spicybet-99ed9-default-rtdb.asia-southeast1.firebasedatabase.app/",
+};
+
 import {
   getDatabase,
   ref,
@@ -10,9 +16,7 @@ import {
   increment,
 } from "firebase/database";
 
-export const firebaseApp = async () => {
-  const db = getDatabase();
-  console.log(db);
-
-  return db;
+export const getFirebaseApp = () => {
+  const app = initializeApp(firebaseConfig);
+  return app;
 };

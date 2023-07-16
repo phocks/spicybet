@@ -11,16 +11,16 @@
     increment,
   } from "firebase/database";
 
-  import { initializeApp } from "firebase/app";
-  import { setApp } from "../stores/app";
+  // import { initializeApp } from "firebase/app";
+  // import { setApp } from "../stores/app";
 
-  const firebaseConfig = {
-    databaseURL:
-      "https://spicybet-99ed9-default-rtdb.asia-southeast1.firebasedatabase.app/",
-  };
+  // const firebaseConfig = {
+  //   databaseURL:
+  //     "https://spicybet-99ed9-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  // };
 
-  const firebaseApp = initializeApp(firebaseConfig);
-  setApp(firebaseApp);
+  // const firebaseApp = initializeApp(firebaseConfig);
+  // setApp(firebaseApp);
 
   function initMatch(matchId: string) {
     const db = getDatabase();
