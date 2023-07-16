@@ -1,5 +1,13 @@
 ---
 export const prerender = false;
-// Hybrid Astro set server
-const { resource, id } = Astro.params;
+
+import Layout from "@layouts/Layout.astro";
+import App from "@components/App.svelte";
+
+const { matchId } = Astro.params;
+console.log(matchId);
 ---
+
+<Layout title={"Match: " + matchId + " / SpicyBet"}>
+  <App matchId={matchId} client:only="svelte" />
+</Layout>
