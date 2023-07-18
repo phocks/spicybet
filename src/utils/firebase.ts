@@ -14,6 +14,33 @@ import {
   increment,
 } from "firebase/database";
 
+// Types
+interface Match {
+  id: string;
+  round: number;
+  player1Id: string | null;
+  player2Id: string | null;
+  player1Guess: "red" | "blue" | null;
+  player2Guess: "red" | "blue" | null;
+  player1Score: number;
+  player2Score: number;
+}
+
+function getInitialData(matchId: string): Match {
+  const initialData: Match = {
+    id: matchId,
+    round: 1,
+    player1Id: null,
+    player2Id: null,
+    player1Guess: null,
+    player2Guess: null,
+    player1Score: 0,
+    player2Score: 0,
+  };
+
+  return initialData;
+}
+
 // Config
 const firebaseConfig = {
   databaseURL:
@@ -25,27 +52,20 @@ export const getFirebaseApp = () => {
   return app;
 };
 
+const createInitialData = async (matchId: string) => {
+  const db = getDatabase();
+
+  const initialData = getInitialData(matchId);
+
+  const [error, result] = await wrap(
+    set(ref(db, "match/" + matchId), initialData)
+  );
+
+  if (!error) console.log("Initial data created");
+  else console.log("Error creating initial data", error);
+};
+
 export const getFirebaseDatabase = async (matchId) => {
-  const initialData = {
-    id: matchId,
-    round: 1,
-    player1Guess: "none",
-    player2Guess: "none",
-    player1Score: 0,
-    player2Score: 0,
-  };
-
-  const createInitialData = async (matchId: string) => {
-    const db = getDatabase();
-
-    const [error, result] = await wrap(
-      set(ref(db, "match/" + matchId), initialData)
-    );
-
-    if (!error) console.log("Initial data created");
-    else console.log("Error creating initial data", error);
-  };
-
   const dbRef = ref(getDatabase());
   const snapshot = await get(child(dbRef, `match/${matchId}`));
 
@@ -77,6 +97,6 @@ export const getFirebaseDatabase = async (matchId) => {
   } else {
     console.log("Data not there, creating...");
     await createInitialData(matchId);
-    return initialData;
+    return getInitialData(matchId);
   }
 };

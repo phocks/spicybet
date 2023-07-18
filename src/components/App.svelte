@@ -4,6 +4,7 @@
 
   // Imports
   import { onMount, onDestroy } from "svelte";
+  import { match } from "ts-pattern";
 
   // Local Imports
   import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
@@ -20,7 +21,8 @@
     player2Score,
     incrementRound,
   } from "@stores/firebase";
-  import { match } from "ts-pattern";
+  import { playerId } from "@stores/player";
+  console.log("playerId", $playerId);
 
   // State
 
