@@ -7,7 +7,11 @@
   import { match } from "ts-pattern";
 
   // Local Imports
-  import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
+  import {
+    getFirebaseApp,
+    getFirebaseDatabase,
+    resetMatch,
+  } from "@utils/firebase";
   import {
     round,
     player1Guess,
@@ -106,6 +110,8 @@
 
   <h3>Player 1 score: {$player1Score}</h3>
   <h3>Player 2 score: {$player2Score}</h3>
+
+  <button on:click={() => resetMatch(matchId)}>Reset</button>
 </div>
 
 <style lang="scss">

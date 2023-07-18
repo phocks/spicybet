@@ -52,7 +52,7 @@ export const getFirebaseApp = () => {
   return app;
 };
 
-const createInitialData = async (matchId: string) => {
+const resetWithInitialData = async (matchId: string) => {
   const db = getDatabase();
 
   const initialData = getInitialData(matchId);
@@ -89,14 +89,18 @@ export const getFirebaseDatabase = async (matchId) => {
       )
       .otherwise(async (data) => {
         console.log("Data is inconsistent, updating...");
-        await createInitialData(matchId);
+        await resetWithInitialData(matchId);
         return data;
       });
 
     return matchData;
   } else {
     console.log("Data not there, creating...");
-    await createInitialData(matchId);
+    await resetWithInitialData(matchId);
     return getInitialData(matchId);
   }
+};
+
+export const resetMatch = async (matchId: string) => {
+  resetWithInitialData(matchId);
 };

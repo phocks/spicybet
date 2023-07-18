@@ -15,8 +15,8 @@ import { match, P } from "ts-pattern";
 type ColorChoice = "red" | "blue" | "none";
 
 export const round = atom<number | null>(null);
-export const player1Guess = atom<ColorChoice>("none");
-export const player2Guess = atom<ColorChoice>("none");
+export const player1Guess = atom<ColorChoice>(null);
+export const player2Guess = atom<ColorChoice>(null);
 export const player1Score = atom<number>(0);
 export const player2Score = atom<number>(0);
 
@@ -25,8 +25,8 @@ export const subscribeAll = (matchId: string) => {
   const unsubscribe = onValue(ref(db, `match/${matchId}/`), (snapshot) => {
     const data = snapshot.val();
     round.set(data.round);
-    player1Guess.set(data.player1Guess);
-    player2Guess.set(data.player2Guess);
+    player1Guess.set(data.player1Guess ? data.player1Guess : null);
+    player2Guess.set(data.player2Guess ? data.player2Guess : null);
     player1Score.set(data.player1Score);
     player2Score.set(data.player2Score);
   });
@@ -89,7 +89,7 @@ export const incrementRound = async (matchId: string) => {
 
   update(ref(db, `match/${matchId}/`), {
     round: increment(1),
-    player1Guess: "none",
-    player2Guess: "none",
+    player1Guess: null,
+    player2Guess: null,
   });
 };
