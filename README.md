@@ -16,3 +16,12 @@ To help develop you'll probably need the following
 - cd into the cloned dir - `cd spicybet`
 - Install dependencies - `npm install`
 - Run the local dev server - `npm start`
+
+## Projects used
+
+Familiarise yourself with these projects too.
+
+- https://astro.build
+- https://svelte.dev
+- https://firebase.google.com
+- https://github.com/nanostores/nanostores
