@@ -1,0 +1,13 @@
+---
+export const prerender = false;
+
+import Layout from "@layouts/Layout.astro";
+import { nanoid } from "nanoid";
+const newMatchId = "test-id"; //nanoid();
+
+return Astro.redirect(`/match/${newMatchId}`);
+---
+
+<Layout title="SpicyBet / Lose money with friends...">
+  <main>Loading new match...</main>
+</Layout>
