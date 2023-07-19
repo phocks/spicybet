@@ -12,6 +12,13 @@ import {
 } from "firebase/database";
 import { match, P } from "ts-pattern";
 
+import { matchId as $matchId } from "./match";
+let matchId;
+$matchId.subscribe((id) => {
+  console.log(`id: ${id}`);
+  matchId = id;
+});
+
 type ColorChoice = "red" | "blue" | "none";
 
 export const round = atom<number | null>(null);
@@ -20,7 +27,7 @@ export const player2Guess = atom<ColorChoice>(null);
 export const player1Score = atom<number>(0);
 export const player2Score = atom<number>(0);
 
-export const subscribeAll = (matchId: string) => {
+export const subscribeAll = () => {
   const db = getDatabase();
   const unsubscribe = onValue(ref(db, `match/${matchId}/`), (snapshot) => {
     const data = snapshot.val();
@@ -40,10 +47,7 @@ function getOtherPlayerColor(color: ColorChoice) {
     .exhaustive();
 }
 
-export const choosePlayer1Color = async (
-  matchId: string,
-  color: ColorChoice
-) => {
+export const choosePlayer1Color = async (color: ColorChoice) => {
   const db = getDatabase();
 
   const otherPlayerColor = getOtherPlayerColor(color);
@@ -54,10 +58,7 @@ export const choosePlayer1Color = async (
   });
 };
 
-export const choosePlayer2Color = async (
-  matchId: string,
-  color: ColorChoice
-) => {
+export const choosePlayer2Color = async (color: ColorChoice) => {
   const db = getDatabase();
 
   const otherPlayerColor = getOtherPlayerColor(color);
@@ -68,7 +69,7 @@ export const choosePlayer2Color = async (
   });
 };
 
-export const incrementPlayer1Score = async (matchId: string) => {
+export const incrementPlayer1Score = async () => {
   const db = getDatabase();
 
   update(ref(db, `match/${matchId}/`), {
@@ -76,7 +77,7 @@ export const incrementPlayer1Score = async (matchId: string) => {
   });
 };
 
-export const incrementPlayer2Score = async (matchId: string) => {
+export const incrementPlayer2Score = async () => {
   const db = getDatabase();
 
   update(ref(db, `match/${matchId}/`), {
@@ -84,7 +85,7 @@ export const incrementPlayer2Score = async (matchId: string) => {
   });
 };
 
-export const incrementRound = async (matchId: string) => {
+export const incrementRound = async () => {
   const db = getDatabase();
 
   update(ref(db, `match/${matchId}/`), {

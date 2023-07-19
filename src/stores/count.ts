@@ -11,7 +11,7 @@ import {
   increment,
 } from "firebase/database";
 
-import { matchId } from "./matchId";
+import { matchId } from "./match";
 
 export const count = computed(matchId, matchId => {
   const db = getDatabase();

@@ -12,6 +12,12 @@
     getFirebaseDatabase,
     resetMatch,
   } from "@utils/firebase";
+  import { nullDash } from "@lib/helpers";
+
+  import { playerId } from "@stores/player";
+  console.log("playerId", $playerId);
+
+  // Stores
   import {
     round,
     player1Guess,
@@ -25,84 +31,77 @@
     player2Score,
     incrementRound,
   } from "@stores/firebase";
-  import { playerId } from "@stores/player";
-  console.log("playerId", $playerId);
+  import { setMatchId } from "@stores/match";
 
   // State
-
-  function nullDash(value: number | string | null) {
-    return value === null ? "-" : value;
-  }
+  let databaseReady: boolean = false;
 
   onMount(async () => {
-    console.log("mounted");
+    setMatchId(matchId);
     const firebaseApp = getFirebaseApp();
+    console.log("firebaseApp", firebaseApp);
     const data = await getFirebaseDatabase(matchId);
     console.log(data);
-    subscribeAll(matchId);
+    databaseReady = true;
+    subscribeAll();
   });
+
+  type Winner = "player1" | "player2" | "tie";
+
+  function whichPlayer(winner): Winner {
+    if ($player1Guess === $player2Guess) {
+      return "tie";
+    } else if (winner === "red") {
+      if ($player1Guess === "red") {
+        return "player1";
+      } else if ($player2Guess === "red") {
+        return "player2";
+      }
+    } else {
+      if ($player2Guess === "blue") {
+        return "player2";
+      } else if ($player1Guess === "blue") {
+        return "player1";
+      }
+    }
+  }
 
   function processWin(winner: string) {
     console.log("processWin", winner);
-
-    type Winner = "player1" | "player2" | "tie";
-
-    function whichPlayer(winner): Winner {
-      if ($player1Guess === $player2Guess) {
-        return "tie";
-      } else if (winner === "red") {
-        if ($player1Guess === "red") {
-          return "player1";
-        } else if ($player2Guess === "red") {
-          return "player2";
-        }
-      } else {
-        if ($player2Guess === "blue") {
-          return "player2";
-        } else if ($player1Guess === "blue") {
-          return "player1";
-        }
-      }
-    }
 
     const winningPlayer = whichPlayer(winner);
 
     match(winningPlayer)
       .with("player1", () => {
-        incrementPlayer1Score(matchId);
+        incrementPlayer1Score();
       })
       .with("player2", () => {
-        incrementPlayer2Score(matchId);
+        incrementPlayer2Score();
       })
       .with("tie", () => {
         console.log("tie");
       })
       .exhaustive();
 
-    incrementRound(matchId);
+    incrementRound();
   }
 </script>
 
 <div>
   <h2>Round {nullDash($round)}</h2>
   <h3>Player 1 choice: {$player1Guess}</h3>
-  <button class="choose-red" on:click={() => choosePlayer1Color(matchId, "red")}
+  <button class="choose-red" on:click={() => choosePlayer1Color("red")}
     >Choose red</button
   >
-  <button
-    class="choose-blue"
-    on:click={() => choosePlayer1Color(matchId, "blue")}>Choose blue</button
+  <button class="choose-blue" on:click={() => choosePlayer1Color("blue")}
+    >Choose blue</button
   >
   <h3>Player 2 choice: {$player2Guess}</h3>
-  <button
-    class="choose-red"
-    on:click={() => choosePlayer2Color(matchId, "red")}
-  >
+  <button class="choose-red" on:click={() => choosePlayer2Color("red")}>
     Choose red
   </button>
-  <button
-    class="choose-blue"
-    on:click={() => choosePlayer2Color(matchId, "blue")}>Choose blue</button
+  <button class="choose-blue" on:click={() => choosePlayer2Color("blue")}
+    >Choose blue</button
   >
   <h3>Who won?</h3>
   <button on:click={() => processWin("red")}>Red</button>
