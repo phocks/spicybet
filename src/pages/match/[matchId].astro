@@ -1,13 +1,13 @@
 ---
 export const prerender = false;
 
-import Layout from "@layouts/Layout.astro";
+import CenterLayout from "@layouts/CenterLayout.astro";
 import App from "@components/App.svelte";
 
 const { matchId } = Astro.params;
 ---
 
-<Layout title={"Match: " + matchId + " / SpicyBet"}>
+<CenterLayout title={"Match: " + matchId + " / SpicyBet"}>
   <main>
     <!-- <h1><span class="text-gradient">SpicyBet</span></h1>
     <p class="instructions">
@@ -16,7 +16,7 @@ const { matchId } = Astro.params;
     </p> -->
     <App matchId={matchId} client:only="svelte" />
   </main>
-</Layout>
+</CenterLayout>
 
 <style lang="scss">
   main {

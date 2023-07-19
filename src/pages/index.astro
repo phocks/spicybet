@@ -1,56 +1,20 @@
 ---
-import Layout from "@layouts/Layout.astro";
+import LandingLayout from "@layouts/LandingLayout.astro";
 import Card from "../components/Card.astro";
-// import App from "../components/App.svelte";
-// import BetCounter from "../components/BetCounter.svelte";
-// import ResetButton from "../components/ResetButton.svelte";
 ---
 
-<Layout title="SpicyBet / Lose money with friends...">
+<LandingLayout title="SpicyBet / Lose money with friends...">
   <main>
     <h1><span class="text-gradient">SpicyBet</span></h1>
     <p class="instructions">
-      This is an alpha version of SpicyBet, a web app where you bet at various levels of spicy. <strong>Use at your own risk.</strong>
+      This is an alpha version of SpicyBet, a web app where you bet at various
+      levels of spicy. <strong>Use at your own risk.</strong>
     </p>
     <ul role="list" class="link-card-grid">
-      <Card
-        href="/new"
-        title="Start new match"
-        body="Let's get spicy!"
-      />
-      <!-- <Card
-        href="https://astro.build/integrations/"
-        title="Integrations"
-        body="Supercharge your project with new frameworks and libraries."
-      /> -->
+      <Card href="/new" title="Start new match" body="Let's get spicy!" />
     </ul>
-
-    <!-- <BetCounter client:idle /> <ResetButton client:idle /> -->
-
-    <!-- <ul role="list" class="link-card-grid">
-      <Card
-        href="https://docs.astro.build/"
-        title="Documentation"
-        body="Learn how Astro works and explore the official API docs."
-      />
-      <Card
-        href="https://astro.build/integrations/"
-        title="Integrations"
-        body="Supercharge your project with new frameworks and libraries."
-      />
-      <Card
-        href="https://astro.build/themes/"
-        title="Themes"
-        body="Explore a galaxy of community-built starter themes."
-      />
-      <Card
-        href="https://astro.build/chat/"
-        title="Community"
-        body="Come say hi to our amazing Discord community. ❤️"
-      />
-    </ul> -->
   </main>
-</Layout>
+</LandingLayout>
 
 <style>
   main {
