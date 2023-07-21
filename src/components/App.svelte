@@ -2,6 +2,9 @@
   // Props
   export let matchId: string;
 
+  // Components
+  import { Alert } from 'flowbite-svelte';
+
   // Imports
   import { onMount, onDestroy } from "svelte";
   import { match } from "ts-pattern";
@@ -88,6 +91,11 @@
 </script>
 
 <div>
+  <div class="p-8">
+    <Alert>
+      <span class="font-medium">Info alert!</span> Change a few things up and try submitting again.
+    </Alert>
+  </div>
   <h2>Round {nullDash($round)}</h2>
   <h3>Player 1 choice: {$player1Guess}</h3>
   <button class="choose-red" on:click={() => choosePlayer1Color("red")}
