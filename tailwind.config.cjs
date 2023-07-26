@@ -1,6 +1,6 @@
 const config = {
   content: [
-    "./src/**/*.{html,js,svelte,ts}",
+    "./src/**/*.{html,js,svelte,ts,jsx,tsx}",
     "./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}",
   ],
 

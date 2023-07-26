@@ -11,11 +11,13 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^2.2.1",
     "@astrojs/svelte": "^3.1.0",
-    "@astrojs/tailwind": "^4.0.0",
     "@astrojs/vercel": "^3.7.2",
     "@floating-ui/dom": "^1.4.5",
     "@nanostores/persistent": "^0.9.1",
+    "@types/react": "^18.2.16",
+    "@types/react-dom": "^18.2.7",
     "astro": "^2.8.2",
     "await-to-js": "^3.0.0",
     "firebase": "^10.0.0",
@@ -23,10 +25,15 @@
     "flowbite-svelte": "^0.40.1",
     "nanoid": "^4.0.2",
     "nanostores": "^0.9.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "sass": "^1.63.6",
     "svelte": "^4.0.5",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "^3.3.3",
     "ts-pattern": "^5.0.3"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^4.0.0"
   }
 }
