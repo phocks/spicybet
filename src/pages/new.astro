@@ -13,7 +13,7 @@ import CenterLayout from "@layouts/CenterLayout.astro";
 <!-- Do this using client side instead -->
 <script>
   const newMatchId = "test-id"; //nanoid();
-  window.location.replace(`/match/${newMatchId}`);
+  window.location.replace(`/match/?match=${newMatchId}`);
 </script>
 
 <CenterLayout title="SpicyBet / Lose money with friends...">

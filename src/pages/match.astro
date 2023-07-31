@@ -1,23 +1,26 @@
 ---
-export const prerender = false;
+// export const prerender = false;
 
-import CenterLayout from "@layouts/CenterLayout.astro";
+import Layout from "@layouts/Layout.astro";
 import App from "@components/svelte/App.svelte";
-
-const { matchId } = Astro.params;
+import DarkMode from "@components/svelte/DarkMode.svelte";
 ---
 
-<CenterLayout title={"Match: " + matchId + " / SpicyBet"}>
-  <main>
-    <App matchId={matchId} client:only="svelte" />
+<Layout title="Match / SpicyBet">
+  <DarkMode client:idle />
+  <main class="bg-white dark:bg-gray-800">
+    <!-- <App matchId={matchId} client:only="svelte" /> -->
+    Hello
   </main>
-</CenterLayout>
+</Layout>
 
 <style lang="scss">
   main {
-    margin: auto;
-    padding: 1.5rem;
-    max-width: 60ch;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   h1 {
     font-size: 3rem;

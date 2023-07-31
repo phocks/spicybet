@@ -20,7 +20,7 @@
     "@types/react-dom": "^18.2.7",
     "astro": "^2.8.2",
     "await-to-js": "^3.0.0",
-    "firebase": "^10.0.0",
+    "firebase": "^8.6.8",
     "flowbite": "^1.7.0",
     "flowbite-svelte": "^0.40.1",
     "nanoid": "^4.0.2",
