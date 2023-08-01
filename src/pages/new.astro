@@ -1,13 +1,7 @@
 ---
 // Utility route that redirects to a new match
-// export const prerender = false;
 
-import CenterLayout from "@layouts/CenterLayout.astro";
-
-// import { nanoid } from "nanoid";
-// const newMatchId = "test-id"; //nanoid();
-
-// return Astro.redirect(`/match/${newMatchId}`);
+import CenterLayout from "@layouts/Layout.astro";
 ---
 
 <!-- Do this using client side instead -->
@@ -16,7 +10,6 @@ import CenterLayout from "@layouts/CenterLayout.astro";
   window.location.replace(`/match/?match=${newMatchId}`);
 </script>
 
-<CenterLayout title="SpicyBet / Lose money with friends...">
+<CenterLayout title="Redirecting...">
   <main>...</main>
 </CenterLayout>
-

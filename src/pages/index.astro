@@ -3,8 +3,8 @@ import Layout from "@layouts/Layout.astro";
 import Card from "../components/astro/Card.astro";
 import TitleScreen from "@components/svelte/TitleScreen.svelte";
 
-import { GradientButton } from 'flowbite-svelte';
-import DarkMode  from "@components/svelte/DarkMode.svelte";
+import { GradientButton } from "flowbite-svelte";
+import DarkMode from "@components/svelte/DarkMode.svelte";
 ---
 
 <Layout title="SpicyBet / Lose money with friends...">
@@ -12,7 +12,9 @@ import DarkMode  from "@components/svelte/DarkMode.svelte";
   <main class="bg-white dark:bg-gray-800">
     <div class="front-title">
       <TitleScreen client:idle />
-      <GradientButton href="/new" color="purpleToBlue">New match</GradientButton>
+      <GradientButton href="/new" color="purpleToBlue">
+        New match
+      </GradientButton>
     </div>
   </main>
 </Layout>
@@ -25,8 +27,6 @@ import DarkMode  from "@components/svelte/DarkMode.svelte";
     justify-content: center;
     align-items: center;
   }
-
-  
 
   .front-title {
     text-align: center;

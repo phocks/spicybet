@@ -1,6 +1,4 @@
 ---
-// export const prerender = false;
-
 import Layout from "@layouts/Layout.astro";
 import App from "@components/svelte/App.svelte";
 import DarkMode from "@components/svelte/DarkMode.svelte";
@@ -9,8 +7,8 @@ import DarkMode from "@components/svelte/DarkMode.svelte";
 <Layout title="Match / SpicyBet">
   <DarkMode client:idle />
   <main class="bg-white dark:bg-gray-800">
-    <!-- <App matchId={matchId} client:only="svelte" /> -->
-    Hello
+    <App client:only="svelte" />
+    <p class="text-base dark:text-white"></p>
   </main>
 </Layout>
 
@@ -22,11 +20,13 @@ import DarkMode from "@components/svelte/DarkMode.svelte";
     justify-content: center;
     align-items: center;
   }
+
   h1 {
     font-size: 3rem;
     font-weight: 800;
     margin: 0;
   }
+
   .text-gradient {
     background-image: var(--accent-gradient);
     -webkit-background-clip: text;
@@ -34,6 +34,7 @@ import DarkMode from "@components/svelte/DarkMode.svelte";
     background-size: 400%;
     background-position: 0%;
   }
+
   .instructions {
     line-height: 1.6;
     margin: 1rem 0;
@@ -42,6 +43,7 @@ import DarkMode from "@components/svelte/DarkMode.svelte";
     padding: 1rem;
     border-radius: 0.4rem;
   }
+
   .instructions code {
     font-size: 0.875em;
     font-weight: bold;
@@ -50,9 +52,11 @@ import DarkMode from "@components/svelte/DarkMode.svelte";
     border-radius: 4px;
     padding: 0.3em 0.45em;
   }
+
   .instructions strong {
     color: rgb(var(--accent));
   }
+
   .link-card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
