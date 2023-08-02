@@ -72,13 +72,16 @@ export const getFirebaseDatabase = async (matchId) => {
   if (snapshot.exists()) {
     console.log("Data exists. Checking if consistent...");
     const matchData = snapshot.val();
+    console.log("matchData", matchData);
     await match(matchData)
       .with(
         {
           id: P.string,
           round: P.number,
-          player1Guess: P.string,
-          player2Guess: P.string,
+          player1Id: P.optional(P.string),
+          player2Id: P.optional(P.string),
+          player1Guess: P.optional(P.string),
+          player2Guess: P.optional(P.string),
           player1Score: P.number,
           player2Score: P.number,
         },
