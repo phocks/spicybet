@@ -22,12 +22,14 @@
     const firebaseApp = getFirebaseApp();
     console.log("Connected to firebase:", firebaseApp.options.databaseURL);
     const data = await getFirebaseDatabase(matchId);
-    console.log(data);
+    console.log("App data:", data);
   });
 </script>
 
-<!-- <div class="text-base dark:text-white">Welcome...</div>
- -->
+<svelte:head>
+  <title>Match: {matchId} // SpicyBet</title>
+</svelte:head>
+
 <div class="root">
   <Heading tag="h1" class="flex items-center" size="text-5xl">Welcome</Heading>
 </div>
@@ -38,6 +40,5 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    // height: 100dvh;
   }
 </style>

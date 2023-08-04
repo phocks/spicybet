@@ -2,6 +2,12 @@ import { initializeApp } from "firebase/app";
 import wrap from "await-to-js";
 import { match, P } from "ts-pattern";
 
+// Use Day.js for time calculations
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+console.log(dayjs.utc().format());
+
 import {
   getDatabase,
   ref,
@@ -18,12 +24,14 @@ import {
 interface Match {
   matchId: string;
   roundNumber: number;
+  createdTime: string;
 }
 
 function getInitialData(matchId: string): Match {
   const initialData: Match = {
-    id: matchId,
-    round: 1,
+    matchId: matchId,
+    roundNumber: 1,
+    createdTime: dayjs.utc().format(),
   };
 
   return initialData;
@@ -51,6 +59,8 @@ const resetWithInitialData = async (matchId: string) => {
 
   if (!error) console.log("Initial data set on Firebase:", initialData);
   else console.log("Error creating initial data", error);
+
+  return initialData;
 };
 
 export const getFirebaseDatabase = async (matchId) => {
@@ -66,6 +76,7 @@ export const getFirebaseDatabase = async (matchId) => {
         {
           matchId: P.string,
           roundNumber: P.number,
+          createdTime: P.string,
         },
         (data) => {
           console.log("Data is consistent");
@@ -74,8 +85,8 @@ export const getFirebaseDatabase = async (matchId) => {
       )
       .otherwise(async (data) => {
         console.log("Data is inconsistent, updating...");
-        await resetWithInitialData(matchId);
-        return data;
+        const initialData = await resetWithInitialData(matchId);
+        return initialData;
       });
 
     return confirmedData;
