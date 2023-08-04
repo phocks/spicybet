@@ -1,4 +1,4 @@
-import { atom } from "nanostores";
+import { atom, map } from "nanostores";
 import {
   getDatabase,
   ref,
@@ -14,7 +14,10 @@ import { match, P } from "ts-pattern";
 
 import { matchId } from "./match";
 
+import type { Match } from "@utils/firebase";
 type ColorChoice = "red" | "blue" | "none";
+
+export const matchData = atom<Match>(null);
 
 export const round = atom<number | null>(null);
 export const player1Guess = atom<ColorChoice>(null);
@@ -28,6 +31,10 @@ export const subscribeAll = () => {
     ref(db, `match/${matchId.get()}/`),
     (snapshot) => {
       const data = snapshot.val();
+
+      // Using a single map now I think 
+      matchData.set(data);
+
       round.set(data.round);
       player1Guess.set(data.player1Guess ? data.player1Guess : null);
       player2Guess.set(data.player2Guess ? data.player2Guess : null);

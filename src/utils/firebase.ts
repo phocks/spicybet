@@ -21,7 +21,7 @@ import {
 } from "firebase/database";
 
 // Types
-interface Match {
+export type Match = {
   matchId: string;
   roundNumber: number;
   createdTime: string;
