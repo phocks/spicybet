@@ -17,11 +17,6 @@
     resetMatch,
   } from "@utils/firebase";
 
-  // Local state
-  let matchState = {
-    matchId: matchId,
-  };
-
   // Do on mount
   onMount(async () => {
     const firebaseApp = getFirebaseApp();

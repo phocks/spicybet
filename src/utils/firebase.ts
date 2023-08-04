@@ -16,26 +16,14 @@ import {
 
 // Types
 interface Match {
-  id: string;
-  round: number;
-  player1Id: string | null;
-  player2Id: string | null;
-  player1Guess: "red" | "blue" | null;
-  player2Guess: "red" | "blue" | null;
-  player1Score: number;
-  player2Score: number;
+  matchId: string;
+  roundNumber: number;
 }
 
 function getInitialData(matchId: string): Match {
   const initialData: Match = {
     id: matchId,
     round: 1,
-    player1Id: null,
-    player2Id: null,
-    player1Guess: null,
-    player2Guess: null,
-    player1Score: 0,
-    player2Score: 0,
   };
 
   return initialData;
@@ -61,7 +49,7 @@ const resetWithInitialData = async (matchId: string) => {
     set(ref(db, "match/" + matchId), initialData)
   );
 
-  if (!error) console.log("Initial data created");
+  if (!error) console.log("Initial data set on Firebase:", initialData);
   else console.log("Error creating initial data", error);
 };
 
@@ -73,17 +61,11 @@ export const getFirebaseDatabase = async (matchId) => {
     console.log("Data exists. Checking if consistent...");
     const matchData = snapshot.val();
     console.log("matchData", matchData);
-    await match(matchData)
+    const confirmedData = await match(matchData)
       .with(
         {
-          id: P.string,
-          round: P.number,
-          player1Id: P.optional(P.string),
-          player2Id: P.optional(P.string),
-          player1Guess: P.optional(P.string),
-          player2Guess: P.optional(P.string),
-          player1Score: P.number,
-          player2Score: P.number,
+          matchId: P.string,
+          roundNumber: P.number,
         },
         (data) => {
           console.log("Data is consistent");
@@ -96,7 +78,7 @@ export const getFirebaseDatabase = async (matchId) => {
         return data;
       });
 
-    return matchData;
+    return confirmedData;
   } else {
     console.log("Data not there, creating...");
     await resetWithInitialData(matchId);
