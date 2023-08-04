@@ -25,7 +25,7 @@
   // Do on mount
   onMount(async () => {
     const firebaseApp = getFirebaseApp();
-    console.log("Connected to firebase:", firebaseApp._options.databaseURL);
+    console.log("Connected to firebase:", firebaseApp.options.databaseURL);
     const data = await getFirebaseDatabase(matchId);
     console.log(data);
   });
