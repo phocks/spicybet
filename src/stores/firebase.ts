@@ -14,34 +14,26 @@ import { match, P } from "ts-pattern";
 
 import { matchId } from "./match";
 
-import type { Match } from "@utils/firebase";
+import type { Match, Players } from "@utils/firebase";
 type ColorChoice = "red" | "blue" | "none";
+
+const MAX_PLAYERS = 2;
 
 export const matchData = atom<Match>(null);
 
-export const round = atom<number | null>(null);
-export const player1Guess = atom<ColorChoice>(null);
-export const player2Guess = atom<ColorChoice>(null);
-export const player1Score = atom<number>(0);
-export const player2Score = atom<number>(0);
+// export const round = atom<number | null>(null);
+// export const player1Guess = atom<ColorChoice>(null);
+// export const player2Guess = atom<ColorChoice>(null);
+// export const player1Score = atom<number>(0);
+// export const player2Score = atom<number>(0);
 
-export const subscribeAll = () => {
+export const subscribeAll = async () => {
   const db = getDatabase();
-  const unsubscribe = onValue(
-    ref(db, `match/${matchId.get()}/`),
-    (snapshot) => {
-      const data = snapshot.val();
-
-      // Using a single map now
-      matchData.set(data);
-
-      // round.set(data.round);
-      // player1Guess.set(data.player1Guess ? data.player1Guess : null);
-      // player2Guess.set(data.player2Guess ? data.player2Guess : null);
-      // player1Score.set(data.player1Score);
-      // player2Score.set(data.player2Score);
-    }
-  );
+  const unsubscribe = onValue(ref(db, `match/${matchId.get()}/`), snapshot => {
+    const data = snapshot.val();
+    matchData.set(data);
+  });
+  return unsubscribe;
 };
 
 function getOtherPlayerColor(color: ColorChoice) {
@@ -100,20 +92,22 @@ export const incrementRound = async () => {
   });
 };
 
-export const registerPlayer = async (playerId: string) => {
+export const registerPlayer = async (
+  playerId: string,
+  currentPlayers: Players
+) => {
+  // Check current config
+  const getKeyCount = obj => Object.keys(obj).length;
+  if (getKeyCount(currentPlayers) >= MAX_PLAYERS) return false;
+
   const db = getDatabase();
 
-  // Check if player exists
-  const snapshot = await get(child(ref(db), `match/${matchId.get()}/players`));
-
-  console.log(snapshot.val());
-
-  await update(ref(db, `match/${matchId.get()}/`), {
-    players: {
-      one: {
-        playerId: playerId,
-        score: 0,
-      },
+  await update(ref(db, `match/${matchId.get()}/players`), {
+    [playerId]: {
+      playerId: playerId,
+      score: 0,
     },
   });
+
+  return true;
 };

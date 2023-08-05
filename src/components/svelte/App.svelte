@@ -24,8 +24,9 @@
     const firebaseApp = getFirebaseApp();
     console.log("Connected to firebase:", firebaseApp.options.databaseURL);
     const data = await getFirebaseDatabase(matchId);
+    console.log(Object.keys(data.players).length);
     subscribeAll();
-    registerPlayer($playerId);
+    registerPlayer($playerId, data.players);
   });
 
   $: console.log("Match datastore:", $matchData);

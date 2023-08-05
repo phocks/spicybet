@@ -25,6 +25,16 @@ export type Match = {
   matchId: string;
   roundNumber: number;
   createdTime: string;
+  players: Players;
+};
+
+export type Player = {
+  playerId: string;
+  score: number;
+};
+
+export interface Players {
+  [playerId: string]: Player;
 }
 
 function getInitialData(matchId: string): Match {
@@ -32,6 +42,7 @@ function getInitialData(matchId: string): Match {
     matchId: matchId,
     roundNumber: 1,
     createdTime: dayjs.utc().format(),
+    players: {},
   };
 
   return initialData;
@@ -63,7 +74,7 @@ const resetWithInitialData = async (matchId: string) => {
   return initialData;
 };
 
-export const getFirebaseDatabase = async (matchId) => {
+export const getFirebaseDatabase = async (matchId): Promise<Match> => {
   const dbRef = ref(getDatabase());
   const snapshot = await get(child(dbRef, `match/${matchId}`));
 
@@ -77,13 +88,14 @@ export const getFirebaseDatabase = async (matchId) => {
           matchId: P.string,
           roundNumber: P.number,
           createdTime: P.string,
+          players: {},
         },
-        (data) => {
+        data => {
           console.log("Data is consistent");
           return data;
         }
       )
-      .otherwise(async (data) => {
+      .otherwise(async data => {
         console.log("Data is inconsistent, updating...");
         const initialData = await resetWithInitialData(matchId);
         return initialData;
