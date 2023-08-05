@@ -35,11 +35,11 @@ export const subscribeAll = () => {
       // Using a single map now
       matchData.set(data);
 
-      round.set(data.round);
-      player1Guess.set(data.player1Guess ? data.player1Guess : null);
-      player2Guess.set(data.player2Guess ? data.player2Guess : null);
-      player1Score.set(data.player1Score);
-      player2Score.set(data.player2Score);
+      // round.set(data.round);
+      // player1Guess.set(data.player1Guess ? data.player1Guess : null);
+      // player2Guess.set(data.player2Guess ? data.player2Guess : null);
+      // player1Score.set(data.player1Score);
+      // player2Score.set(data.player2Score);
     }
   );
 };
@@ -57,7 +57,7 @@ export const choosePlayer1Color = async (color: ColorChoice) => {
 
   const otherPlayerColor = getOtherPlayerColor(color);
 
-  update(ref(db, `match/${matchId.get()}/`), {
+  await update(ref(db, `match/${matchId.get()}/`), {
     player1Guess: color,
     player2Guess: otherPlayerColor,
   });
@@ -68,7 +68,7 @@ export const choosePlayer2Color = async (color: ColorChoice) => {
 
   const otherPlayerColor = getOtherPlayerColor(color);
 
-  update(ref(db, `match/${matchId.get()}/`), {
+  await update(ref(db, `match/${matchId.get()}/`), {
     player2Guess: color,
     player1Guess: otherPlayerColor,
   });
@@ -77,7 +77,7 @@ export const choosePlayer2Color = async (color: ColorChoice) => {
 export const incrementPlayer1Score = async () => {
   const db = getDatabase();
 
-  update(ref(db, `match/${matchId.get()}/`), {
+  await update(ref(db, `match/${matchId.get()}/`), {
     player1Score: increment(1),
   });
 };
@@ -85,7 +85,7 @@ export const incrementPlayer1Score = async () => {
 export const incrementPlayer2Score = async () => {
   const db = getDatabase();
 
-  update(ref(db, `match/${matchId.get()}/`), {
+  await update(ref(db, `match/${matchId.get()}/`), {
     player2Score: increment(1),
   });
 };
@@ -93,7 +93,7 @@ export const incrementPlayer2Score = async () => {
 export const incrementRound = async () => {
   const db = getDatabase();
 
-  update(ref(db, `match/${matchId.get()}/`), {
+  await update(ref(db, `match/${matchId.get()}/`), {
     round: increment(1),
     player1Guess: null,
     player2Guess: null,
@@ -103,9 +103,14 @@ export const incrementRound = async () => {
 export const registerPlayer = async (playerId: string) => {
   const db = getDatabase();
 
-  update(ref(db, `match/${matchId.get()}/`), {
+  // Check if player exists
+  const snapshot = await get(child(ref(db), `match/${matchId.get()}/players`));
+
+  console.log(snapshot.val());
+
+  await update(ref(db, `match/${matchId.get()}/`), {
     players: {
-      [playerId]: {
+      one: {
         playerId: playerId,
         score: 0,
       },
