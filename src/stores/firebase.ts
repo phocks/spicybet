@@ -27,7 +27,7 @@ export const matchData = atom<Match>(null);
 // export const player1Score = atom<number>(0);
 // export const player2Score = atom<number>(0);
 
-export const subscribeAll = async () => {
+export const subscribeAll = () => {
   const db = getDatabase();
   const unsubscribe = onValue(ref(db, `match/${matchId.get()}/`), snapshot => {
     const data = snapshot.val();

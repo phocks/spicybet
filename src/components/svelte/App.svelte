@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { Heading } from "flowbite-svelte";
 
   // Firebase imports
   import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
+
+  let unsubscribe;
 
   // Stores
   import { setMatchId } from "@stores/match";
@@ -25,8 +27,12 @@
     console.log("Connected to firebase:", firebaseApp.options.databaseURL);
     const data = await getFirebaseDatabase(matchId);
     console.log(Object.keys(data.players).length);
-    subscribeAll();
+    unsubscribe = subscribeAll();
     registerPlayer($playerId, data.players);
+  });
+
+  onDestroy(() => {
+    unsubscribe();
   });
 
   $: console.log("Match datastore:", $matchData);
