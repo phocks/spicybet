@@ -7,7 +7,7 @@
 
   // Stores
   import { setMatchId } from "@stores/match";
-  import { matchData, subscribeAll } from "@stores/firebase";
+  import { matchData, subscribeAll, registerPlayer } from "@stores/firebase";
 
   // Get matchId from URL
   const params = new URLSearchParams(document.location.search);
@@ -24,8 +24,8 @@
     const firebaseApp = getFirebaseApp();
     console.log("Connected to firebase:", firebaseApp.options.databaseURL);
     const data = await getFirebaseDatabase(matchId);
-    console.log("App data:", data);
     subscribeAll();
+    registerPlayer($playerId);
   });
 
   $: console.log("Match datastore:", $matchData);

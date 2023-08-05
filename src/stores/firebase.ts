@@ -32,7 +32,7 @@ export const subscribeAll = () => {
     (snapshot) => {
       const data = snapshot.val();
 
-      // Using a single map now I think 
+      // Using a single map now
       matchData.set(data);
 
       round.set(data.round);
@@ -97,5 +97,18 @@ export const incrementRound = async () => {
     round: increment(1),
     player1Guess: null,
     player2Guess: null,
+  });
+};
+
+export const registerPlayer = async (playerId: string) => {
+  const db = getDatabase();
+
+  update(ref(db, `match/${matchId.get()}/`), {
+    players: {
+      [playerId]: {
+        playerId: playerId,
+        score: 0,
+      },
+    },
   });
 };
