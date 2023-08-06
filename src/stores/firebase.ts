@@ -14,7 +14,7 @@ import { match, P } from "ts-pattern";
 
 import { matchId } from "./match";
 
-import type { Match, Players } from "@utils/firebase";
+import type { Match, Player, Players } from "@utils/firebase";
 type ColorChoice = "red" | "blue" | "none";
 
 const MAX_PLAYERS = 2;
@@ -104,13 +104,16 @@ export const registerPlayer = async (
 
   const db = getDatabase();
 
+  const initialPlayerData: Player = {
+    index: getKeyCount(currentPlayers),
+    playerId: playerId,
+    score: 0,
+    spicyBetBalance: 1,
+    currentBet: "none",
+  };
+
   await update(ref(db, `match/${matchId.get()}/players`), {
-    [playerId]: {
-      index: getKeyCount(currentPlayers),
-      playerId: playerId,
-      score: 0,
-      spicyBetBalance: 1,
-    },
+    [playerId]: initialPlayerData,
   });
 
   return true;
