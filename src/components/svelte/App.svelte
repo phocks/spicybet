@@ -2,6 +2,8 @@
   import { onMount, onDestroy } from "svelte";
   import { Heading } from "flowbite-svelte";
 
+  import Spinner from "@components/svelte/Spinner.svelte";
+
   // Firebase imports
   import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
 
@@ -51,11 +53,11 @@
   {#if $matchData}
     {#if numberOfRegisteredPlayers < 2}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
-        Waiting on other players: {numberOfRegisteredPlayers}
+        Waiting on other players: {2 - numberOfRegisteredPlayers}
       </Heading>
     {:else if playerInfo}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
-        You are player {playerInfo?.index + 1}
+        You are player {playerInfo.index + 1}
       </Heading>
     {:else}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
@@ -63,6 +65,10 @@
       </Heading>
       <p class="my-2.5 dark:text-gray-400">Match ID: {matchId}</p>
     {/if}
+  {:else}
+    <Heading tag="h1" class="flex items-center" size="text-5xl">
+      <Spinner />
+    </Heading>
   {/if}
 </div>
 
