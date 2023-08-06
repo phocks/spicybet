@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-  import { Heading, GradientButton } from "flowbite-svelte";
+  import { Heading, GradientButton, Toggle } from "flowbite-svelte";
 
   import Spinner from "@components/svelte/Spinner.svelte";
 
@@ -10,6 +10,7 @@
   let unsubscribe: () => void;
   let matchState: "registering" | "waiting-to-start" | "waiting-for-bet" =
     "registering";
+  let isSpicyBet = false;
 
   // Stores
   import { setMatchId } from "@stores/match";
@@ -70,6 +71,7 @@
   $: playerInfo = $matchData?.players ? $matchData.players[$playerId] : null;
   $: console.log("Match datastore:", $matchData);
   $: doRoundChange($matchData?.roundNumber);
+  $: console.log("Is spicy bet:", isSpicyBet);
 
   function randomIndex(n: number) {
     return Math.floor(Math.random() * n);
@@ -92,6 +94,9 @@
       </Heading>
       {#if $matchData.currentBetterIndex === playerInfo.index}
         <p class="dark:text-gray-400">It's your turn to bet!</p>
+        <Toggle bind:checked={isSpicyBet}>
+          <span>Spicy bet?!!?</span>
+        </Toggle>
       {:else}
         <p class="dark:text-gray-400">
           Waiting for player {$matchData.currentBetterIndex + 1} to bet...
@@ -101,9 +106,9 @@
       <Heading tag="h1" class="flex items-center mb-4" size="text-5xl">
         You are player {playerInfo.index + 1}
       </Heading>
-      <GradientButton on:click={handleNextRound} color="purpleToBlue"
-        >Start match!</GradientButton
-      >
+      <GradientButton on:click={handleNextRound} color="purpleToBlue">
+        Start match!
+      </GradientButton>
     {:else}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
         Match is full. Here's some spectator stats:
