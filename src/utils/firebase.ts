@@ -29,6 +29,7 @@ export type Match = {
 };
 
 export type Player = {
+  index: number;
   playerId: string;
   score: number;
 };

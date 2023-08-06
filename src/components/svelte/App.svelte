@@ -39,6 +39,7 @@
   $: numberOfRegisteredPlayers = $matchData?.players
     ? Object.keys($matchData.players).length
     : 0;
+  $: playerInfo = $matchData?.players ? $matchData.players[$playerId] : null;
   $: console.log("Match datastore:", $matchData);
 </script>
 
@@ -54,7 +55,7 @@
       </Heading>
     {:else}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
-        Ready to play!
+        You are player {playerInfo.index + 1}
       </Heading>
     {/if}
   {/if}
