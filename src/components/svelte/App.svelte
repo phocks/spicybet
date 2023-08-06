@@ -53,10 +53,15 @@
       <Heading tag="h1" class="flex items-center" size="text-5xl">
         Waiting on other players: {numberOfRegisteredPlayers}
       </Heading>
+    {:else if playerInfo}
+      <Heading tag="h1" class="flex items-center" size="text-5xl">
+        You are player {playerInfo?.index + 1}
+      </Heading>
     {:else}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
-        You are player {playerInfo.index + 1}
+        Match is full. Here's some spectator stats:
       </Heading>
+      <p class="my-2.5 dark:text-gray-400">Match ID: {matchId}</p>
     {/if}
   {/if}
 </div>
@@ -68,5 +73,6 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding: 0 16px;
   }
 </style>
