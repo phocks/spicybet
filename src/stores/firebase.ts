@@ -109,7 +109,8 @@ export const registerPlayer = async (
     playerId: playerId,
     score: 0,
     spicyBetBalance: 1,
-    currentBet: "none",
+    currentBetColor: "none",
+    betAmount: 1,
   };
 
   await update(ref(db, `match/${matchId.get()}/players`), {
@@ -118,3 +119,13 @@ export const registerPlayer = async (
 
   return true;
 };
+
+export const placeBet = async (playerId: string, color: ColorChoice, isSpicy: boolean) => {
+  const betAmount = isSpicy ? 3 : 1;
+  const db = getDatabase();
+
+  await update(ref(db, `match/${matchId.get()}/players/${playerId}`), {
+    currentBetColor: color,
+    betAmount: betAmount,
+  });
+}

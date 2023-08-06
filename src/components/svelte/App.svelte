@@ -32,7 +32,6 @@
   import { match } from "ts-pattern";
   console.log("Player ID is:", $playerId);
 
-  // Do on mount
   onMount(async () => {
     const firebaseApp = getFirebaseApp();
     console.log("Connected to firebase:", firebaseApp.options.databaseURL);
@@ -54,8 +53,15 @@
     incrementRound({ nextBetter: randomBetterIndex });
   };
 
-  const handleBet = (color: "red" | "blue") => {
-    console.log("Betting on", color);
+  const handleBet = ({
+    betColor,
+    spicyBet,
+  }: {
+    betColor: "blue" | "red";
+    spicyBet: boolean;
+  }) => {
+    console.log("Betting on", betColor);
+    console.log("Is spicy?", spicyBet);
   };
 
   const doRoundChange = (roundNumber: number) => {
@@ -65,7 +71,7 @@
         n => n > 0,
         () => {
           matchState = "waiting-for-bet";
-        },
+        }
       );
   };
 
@@ -76,6 +82,7 @@
   $: console.log("Match datastore:", $matchData);
   $: doRoundChange($matchData?.roundNumber);
   $: console.log("Is spicy bet:", isSpicyBet);
+  $: console.log("Match state:", $matchData);
 
   function randomIndex(n: number) {
     return Math.floor(Math.random() * n);
@@ -96,7 +103,7 @@
       <Heading tag="h1" class="" size="text-5xl">
         Round {$matchData.roundNumber}
       </Heading>
-      {#if $matchData.currentBetterIndex === playerInfo.index}
+      {#if $matchData.currentBetterIndex === playerInfo?.index}
         <p class="dark:text-gray-400">It's your turn to bet!</p>
         <Toggle
           bind:checked={isSpicyBet}
@@ -106,12 +113,20 @@
         </Toggle>
         <div class="bet-buttons">
           <span>
-            <GradientButton on:click={() => handleBet("blue")} color="blue">
+            <GradientButton
+              on:click={() =>
+                handleBet({ betColor: "blue", spicyBet: isSpicyBet })}
+              color="blue"
+            >
               Blue
             </GradientButton>
           </span>
           <span>
-            <GradientButton on:click={() => handleBet("red")} color="red">
+            <GradientButton
+              on:click={() =>
+                handleBet({ betColor: "red", spicyBet: isSpicyBet })}
+              color="red"
+            >
               Red
             </GradientButton>
           </span>
