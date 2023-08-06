@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-  import { Heading } from "flowbite-svelte";
+  import { Heading, GradientButton } from "flowbite-svelte";
 
   import Spinner from "@components/svelte/Spinner.svelte";
 
@@ -8,11 +8,17 @@
   import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
 
   let unsubscribe: () => void;
-  let matchState: "registration" = "registration";
+  let matchState: "registering" | "waiting-to-start" | "waiting-for-bet" =
+    "registering";
 
   // Stores
   import { setMatchId } from "@stores/match";
-  import { matchData, subscribeAll, registerPlayer } from "@stores/firebase";
+  import {
+    matchData,
+    subscribeAll,
+    registerPlayer,
+    incrementRound,
+  } from "@stores/firebase";
 
   // Get matchId from URL
   const params = new URLSearchParams(document.location.search);
@@ -22,6 +28,7 @@
 
   // Get player ID from local storage
   import { playerId } from "@stores/player";
+  import { match } from "ts-pattern";
   console.log("Player ID is:", $playerId);
 
   // Do on mount
@@ -29,7 +36,6 @@
     const firebaseApp = getFirebaseApp();
     console.log("Connected to firebase:", firebaseApp.options.databaseURL);
     const data = await getFirebaseDatabase(matchId);
-    console.log(Object.keys(data.players).length);
     unsubscribe = subscribeAll();
     registerPlayer($playerId, data.players);
   });
@@ -38,11 +44,36 @@
     unsubscribe();
   });
 
+  const handleNextRound = () => {
+    console.log("Incrementing round...");
+
+    const randomBetterIndex = randomIndex(numberOfRegisteredPlayers);
+    console.log("Random better index:", randomBetterIndex);
+
+    incrementRound({ nextBetter: randomBetterIndex });
+  };
+
+  const doRoundChange = (roundNumber: number) => {
+    match(roundNumber)
+      .with(0, () => (matchState = "waiting-to-start"))
+      .when(
+        n => n > 0,
+        () => {
+          matchState = "waiting-for-bet";
+        },
+      );
+  };
+
   $: numberOfRegisteredPlayers = $matchData?.players
     ? Object.keys($matchData.players).length
     : 0;
   $: playerInfo = $matchData?.players ? $matchData.players[$playerId] : null;
   $: console.log("Match datastore:", $matchData);
+  $: doRoundChange($matchData?.roundNumber);
+
+  function randomIndex(n: number) {
+    return Math.floor(Math.random() * n);
+  }
 </script>
 
 <svelte:head>
@@ -55,15 +86,30 @@
       <Heading tag="h1" class="flex items-center" size="text-5xl">
         Waiting on other players: {2 - numberOfRegisteredPlayers}
       </Heading>
+    {:else if $matchData.roundNumber > 0}
+      <Heading tag="h1" class="" size="text-5xl">
+        Round {$matchData.roundNumber}
+      </Heading>
+      {#if $matchData.currentBetterIndex === playerInfo.index}
+        <p class="dark:text-gray-400">It's your turn to bet!</p>
+      {:else}
+        <p class="dark:text-gray-400">
+          Waiting for player {$matchData.currentBetterIndex + 1} to bet...
+        </p>
+      {/if}
     {:else if playerInfo}
-      <Heading tag="h1" class="flex items-center" size="text-5xl">
+      <Heading tag="h1" class="flex items-center mb-4" size="text-5xl">
         You are player {playerInfo.index + 1}
       </Heading>
+      <GradientButton on:click={handleNextRound} color="purpleToBlue"
+        >Start match!</GradientButton
+      >
     {:else}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
         Match is full. Here's some spectator stats:
       </Heading>
-      <p class="my-2.5 dark:text-gray-400">Match ID: {matchId}</p>
+      <p class="dark:text-gray-400">Match ID: {matchId}</p>
+      <p>...add more here</p>
     {/if}
   {:else}
     <Heading tag="h1" class="flex items-center" size="text-5xl">

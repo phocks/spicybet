@@ -82,19 +82,18 @@ function getOtherPlayerColor(color: ColorChoice) {
 //   });
 // };
 
-// export const incrementRound = async () => {
-//   const db = getDatabase();
+export const incrementRound = async ({ nextBetter }) => {
+  const db = getDatabase();
 
-//   await update(ref(db, `match/${matchId.get()}/`), {
-//     round: increment(1),
-//     player1Guess: null,
-//     player2Guess: null,
-//   });
-// };
+  await update(ref(db, `match/${matchId.get()}/`), {
+    roundNumber: increment(1),
+    currentBetterIndex: nextBetter,
+  });
+};
 
 export const registerPlayer = async (
   playerId: string,
-  currentPlayers: Players
+  currentPlayers: Players,
 ) => {
   // Check current config
   const getKeyCount = obj => Object.keys(obj).length;
@@ -110,7 +109,7 @@ export const registerPlayer = async (
       index: getKeyCount(currentPlayers),
       playerId: playerId,
       score: 0,
-
+      spicyBetBalance: 0,
     },
   });
 

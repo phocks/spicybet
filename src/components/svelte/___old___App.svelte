@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   // Props
   export let matchId: string;
 
@@ -129,4 +129,4 @@
   .choose-blue {
     background-color: lightblue;
   }
-</style>
+</style> -->

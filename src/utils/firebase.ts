@@ -25,6 +25,7 @@ export type Match = {
   matchId: string;
   roundNumber: number;
   createdTime: string;
+  currentBetterIndex: number;
   players: Players;
 };
 
@@ -32,6 +33,7 @@ export type Player = {
   index: number;
   playerId: string;
   score: number;
+  spicyBetBalance: number;
 };
 
 export interface Players {
@@ -41,8 +43,9 @@ export interface Players {
 function getInitialData(matchId: string): Match {
   const initialData: Match = {
     matchId: matchId,
-    roundNumber: 1,
+    roundNumber: 0,
     createdTime: dayjs.utc().format(),
+    currentBetterIndex: 0,
     players: {},
   };
 
@@ -89,6 +92,7 @@ export const getFirebaseDatabase = async (matchId): Promise<Match> => {
           matchId: P.string,
           roundNumber: P.number,
           createdTime: P.string,
+          currentBetterIndex: P.number,
           players: {},
         },
         data => {
