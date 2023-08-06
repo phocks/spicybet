@@ -36,13 +36,13 @@ export const subscribeAll = () => {
   return unsubscribe;
 };
 
-function getOtherPlayerColor(color: ColorChoice) {
-  return match(color)
-    .with("red", () => "blue")
-    .with("blue", () => "red")
-    .with("none", () => "none")
-    .exhaustive();
-}
+// function getOtherPlayerColor(color: ColorChoice) {
+//   return match(color)
+//     .with("red", () => "blue")
+//     .with("blue", () => "red")
+//     .with("none", () => "none")
+//     .exhaustive();
+// }
 
 // export const choosePlayer1Color = async (color: ColorChoice) => {
 //   const db = getDatabase();
@@ -109,7 +109,7 @@ export const registerPlayer = async (
       index: getKeyCount(currentPlayers),
       playerId: playerId,
       score: 0,
-      spicyBetBalance: 0,
+      spicyBetBalance: 1,
     },
   });
 

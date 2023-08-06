@@ -94,9 +94,16 @@
       </Heading>
       {#if $matchData.currentBetterIndex === playerInfo.index}
         <p class="dark:text-gray-400">It's your turn to bet!</p>
-        <Toggle bind:checked={isSpicyBet} disabled={false}>
-          <span>Spicy bet?!!?</span>
+        <Toggle
+          bind:checked={isSpicyBet}
+          disabled={playerInfo.spicyBetBalance > 0 ? false : true}
+        >
+          {isSpicyBet ? "SPICY BET!!! (3)" : "Normal bet (1)"}
         </Toggle>
+        <div class="bet-buttons">
+          <span><GradientButton color="blue">Blue</GradientButton></span>
+          <GradientButton color="red">Red</GradientButton>
+        </div>
       {:else}
         <p class="dark:text-gray-400">
           Waiting for player {$matchData.currentBetterIndex + 1} to bet...
@@ -131,5 +138,13 @@
     justify-content: center;
     text-align: center;
     padding: 0 16px;
+  }
+
+  .bet-buttons {
+    margin-top: 1rem;
+
+    .spicy-red {
+      color: red;
+    }
   }
 </style>
