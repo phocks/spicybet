@@ -35,6 +35,7 @@
     unsubscribe();
   });
 
+  $: numberOfRegisteredPlayers = $matchData && Object.keys($matchData.players).length;
   $: console.log("Match datastore:", $matchData);
 </script>
 
@@ -43,7 +44,9 @@
 </svelte:head>
 
 <div class="root">
-  <Heading tag="h1" class="flex items-center" size="text-5xl">Welcome</Heading>
+  <Heading tag="h1" class="flex items-center" size="text-5xl">
+    {numberOfRegisteredPlayers}
+  </Heading>
 </div>
 
 <style lang="scss">
