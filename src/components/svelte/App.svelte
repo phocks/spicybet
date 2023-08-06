@@ -94,7 +94,7 @@
       </Heading>
       {#if $matchData.currentBetterIndex === playerInfo.index}
         <p class="dark:text-gray-400">It's your turn to bet!</p>
-        <Toggle bind:checked={isSpicyBet}>
+        <Toggle bind:checked={isSpicyBet} disabled={false}>
           <span>Spicy bet?!!?</span>
         </Toggle>
       {:else}
