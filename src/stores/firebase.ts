@@ -44,53 +44,53 @@ function getOtherPlayerColor(color: ColorChoice) {
     .exhaustive();
 }
 
-export const choosePlayer1Color = async (color: ColorChoice) => {
-  const db = getDatabase();
+// export const choosePlayer1Color = async (color: ColorChoice) => {
+//   const db = getDatabase();
 
-  const otherPlayerColor = getOtherPlayerColor(color);
+//   const otherPlayerColor = getOtherPlayerColor(color);
 
-  await update(ref(db, `match/${matchId.get()}/`), {
-    player1Guess: color,
-    player2Guess: otherPlayerColor,
-  });
-};
+//   await update(ref(db, `match/${matchId.get()}/`), {
+//     player1Guess: color,
+//     player2Guess: otherPlayerColor,
+//   });
+// };
 
-export const choosePlayer2Color = async (color: ColorChoice) => {
-  const db = getDatabase();
+// export const choosePlayer2Color = async (color: ColorChoice) => {
+//   const db = getDatabase();
 
-  const otherPlayerColor = getOtherPlayerColor(color);
+//   const otherPlayerColor = getOtherPlayerColor(color);
 
-  await update(ref(db, `match/${matchId.get()}/`), {
-    player2Guess: color,
-    player1Guess: otherPlayerColor,
-  });
-};
+//   await update(ref(db, `match/${matchId.get()}/`), {
+//     player2Guess: color,
+//     player1Guess: otherPlayerColor,
+//   });
+// };
 
-export const incrementPlayer1Score = async () => {
-  const db = getDatabase();
+// export const incrementPlayer1Score = async () => {
+//   const db = getDatabase();
 
-  await update(ref(db, `match/${matchId.get()}/`), {
-    player1Score: increment(1),
-  });
-};
+//   await update(ref(db, `match/${matchId.get()}/`), {
+//     player1Score: increment(1),
+//   });
+// };
 
-export const incrementPlayer2Score = async () => {
-  const db = getDatabase();
+// export const incrementPlayer2Score = async () => {
+//   const db = getDatabase();
 
-  await update(ref(db, `match/${matchId.get()}/`), {
-    player2Score: increment(1),
-  });
-};
+//   await update(ref(db, `match/${matchId.get()}/`), {
+//     player2Score: increment(1),
+//   });
+// };
 
-export const incrementRound = async () => {
-  const db = getDatabase();
+// export const incrementRound = async () => {
+//   const db = getDatabase();
 
-  await update(ref(db, `match/${matchId.get()}/`), {
-    round: increment(1),
-    player1Guess: null,
-    player2Guess: null,
-  });
-};
+//   await update(ref(db, `match/${matchId.get()}/`), {
+//     round: increment(1),
+//     player1Guess: null,
+//     player2Guess: null,
+//   });
+// };
 
 export const registerPlayer = async (
   playerId: string,
@@ -100,12 +100,17 @@ export const registerPlayer = async (
   const getKeyCount = obj => Object.keys(obj).length;
   if (getKeyCount(currentPlayers) >= MAX_PLAYERS) return false;
 
+  // Check if player already exists
+  if (currentPlayers[playerId]) return false;
+
   const db = getDatabase();
 
   await update(ref(db, `match/${matchId.get()}/players`), {
     [playerId]: {
+      index: getKeyCount(currentPlayers),
       playerId: playerId,
       score: 0,
+
     },
   });
 

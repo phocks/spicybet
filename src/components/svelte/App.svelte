@@ -5,7 +5,8 @@
   // Firebase imports
   import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
 
-  let unsubscribe;
+  let unsubscribe: () => void;
+  let matchState: "registration" = "registration";
 
   // Stores
   import { setMatchId } from "@stores/match";
@@ -35,7 +36,9 @@
     unsubscribe();
   });
 
-  $: numberOfRegisteredPlayers = $matchData && Object.keys($matchData.players).length;
+  $: numberOfRegisteredPlayers = $matchData?.players
+    ? Object.keys($matchData.players).length
+    : 0;
   $: console.log("Match datastore:", $matchData);
 </script>
 
@@ -44,9 +47,17 @@
 </svelte:head>
 
 <div class="root">
-  <Heading tag="h1" class="flex items-center" size="text-5xl">
-    {numberOfRegisteredPlayers}
-  </Heading>
+  {#if $matchData}
+    {#if numberOfRegisteredPlayers < 2}
+      <Heading tag="h1" class="flex items-center" size="text-5xl">
+        Waiting on other players: {numberOfRegisteredPlayers}
+      </Heading>
+    {:else}
+      <Heading tag="h1" class="flex items-center" size="text-5xl">
+        Ready to play!
+      </Heading>
+    {/if}
+  {/if}
 </div>
 
 <style lang="scss">
@@ -55,5 +66,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
   }
 </style>
