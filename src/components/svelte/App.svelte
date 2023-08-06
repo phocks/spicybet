@@ -54,6 +54,10 @@
     incrementRound({ nextBetter: randomBetterIndex });
   };
 
+  const handleBet = (color: "red" | "blue") => {
+    console.log("Betting on", color);
+  };
+
   const doRoundChange = (roundNumber: number) => {
     match(roundNumber)
       .with(0, () => (matchState = "waiting-to-start"))
@@ -101,8 +105,16 @@
           {isSpicyBet ? "SPICY BET!!! (3)" : "Normal bet (1)"}
         </Toggle>
         <div class="bet-buttons">
-          <span><GradientButton color="blue">Blue</GradientButton></span>
-          <GradientButton color="red">Red</GradientButton>
+          <span>
+            <GradientButton on:click={() => handleBet("blue")} color="blue">
+              Blue
+            </GradientButton>
+          </span>
+          <span>
+            <GradientButton on:click={() => handleBet("red")} color="red">
+              Red
+            </GradientButton>
+          </span>
         </div>
       {:else}
         <p class="dark:text-gray-400">
