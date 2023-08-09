@@ -11,6 +11,7 @@
   let matchState: "registering" | "waiting-to-start" | "waiting-for-bet" =
     "registering";
   let isSpicyBet = false;
+  let betChoice: "blue" | "red" | "none" = "none";
 
   // Stores
   import { setMatchId } from "@stores/match";
@@ -19,6 +20,7 @@
     subscribeAll,
     registerPlayer,
     incrementRound,
+    submitBet,
   } from "@stores/firebase";
 
   // Get matchId from URL
@@ -53,39 +55,62 @@
     incrementRound({ nextBetter: randomBetterIndex });
   };
 
-  const handleBet = ({
+  const handleChooseSide = ({
     betColor,
     spicyBet,
   }: {
     betColor: "blue" | "red";
     spicyBet: boolean;
   }) => {
-    console.log("Betting on", betColor);
-    console.log("Is spicy?", spicyBet);
+    isSpicyBet = spicyBet;
+    betChoice = betColor;
   };
 
-  const doRoundChange = (roundNumber: number) => {
-    match(roundNumber)
-      .with(0, () => (matchState = "waiting-to-start"))
-      .when(
-        n => n > 0,
-        () => {
-          matchState = "waiting-for-bet";
-        }
-      );
+  const doMatchDataChange = matchData => {
+    if (!matchData) return;
+    match(matchData)
+      .with({ roundNumber: 0 }, () => {
+        matchState = "waiting-to-start";
+      })
+      .with({ roundNumber: 1 }, () => {
+        matchState = "waiting-for-bet";
+      })
+      .run();
+  };
+
+  const handleLockInBet = () => {
+    if (betChoice === "none") return;
+    console.log("Locking in bet...");
+    submitBet({
+      betColor: betChoice,
+      spicyBet: isSpicyBet,
+      playerId: $playerId,
+    });
   };
 
   $: numberOfRegisteredPlayers = $matchData?.players
     ? Object.keys($matchData.players).length
     : 0;
+  $: waitingForPlayers = numberOfRegisteredPlayers < 2;
   $: playerInfo = $matchData?.players ? $matchData.players[$playerId] : null;
   $: console.log("Match datastore:", $matchData);
-  $: doRoundChange($matchData?.roundNumber);
+  $: doMatchDataChange($matchData);
   $: console.log("Is spicy bet:", isSpicyBet);
-  $: console.log("Match state:", $matchData);
 
   function randomIndex(n: number) {
     return Math.floor(Math.random() * n);
+  }
+
+  function getOpponentData(players) {
+    const playerIds = Object.keys(players);
+    const opponentId = playerIds.find(id => id !== $playerId);
+    return players[opponentId];
+  }
+
+  function findPlayerByIndex(players, index) {
+    const playerIds = Object.keys(players);
+    const playerId = playerIds.find(id => players[id].index === index);
+    return players[playerId];
   }
 </script>
 
@@ -95,7 +120,7 @@
 
 <div class="root">
   {#if $matchData}
-    {#if numberOfRegisteredPlayers < 2}
+    {#if waitingForPlayers}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
         Waiting on other players: {2 - numberOfRegisteredPlayers}
       </Heading>
@@ -115,7 +140,7 @@
           <span>
             <GradientButton
               on:click={() =>
-                handleBet({ betColor: "blue", spicyBet: isSpicyBet })}
+                handleChooseSide({ betColor: "blue", spicyBet: isSpicyBet })}
               color="blue"
             >
               Blue
@@ -124,12 +149,33 @@
           <span>
             <GradientButton
               on:click={() =>
-                handleBet({ betColor: "red", spicyBet: isSpicyBet })}
+                handleChooseSide({ betColor: "red", spicyBet: isSpicyBet })}
               color="red"
             >
               Red
             </GradientButton>
           </span>
+        </div>
+        <div class="pre-bet-choice">
+          <p class="dark:text-gray-400 mb-0">Your bet choice:</p>
+          <p class="text-2xl">
+            {#if betChoice === "blue"}
+              <span class="text-blue-500">Blue</span>
+            {:else if betChoice === "red"}
+              <span class="text-red-500">Red</span>
+            {:else}
+              <span class="dark:text-gray-400">None</span>
+            {/if}
+          </p>
+        </div>
+        <div class="lock-it-in-button">
+          <GradientButton
+            on:click={handleLockInBet}
+            color="redToYellow"
+            disabled={betChoice === "none"}
+          >
+            Lock it in!
+          </GradientButton>
         </div>
       {:else}
         <p class="dark:text-gray-400">
@@ -173,5 +219,9 @@
     .spicy-red {
       color: red;
     }
+  }
+
+  .pre-bet-choice {
+    margin-top: 1rem;
   }
 </style>
