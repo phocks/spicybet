@@ -26,6 +26,7 @@ export type Match = {
   roundNumber: number;
   createdTime: string;
   currentBetterIndex: number;
+  isSpicy: boolean;
   players: Players;
 };
 
@@ -48,6 +49,7 @@ function getInitialData(matchId: string): Match {
     roundNumber: 0,
     createdTime: dayjs.utc().format(),
     currentBetterIndex: 0,
+    isSpicy: false,
     players: {},
   };
 
@@ -95,6 +97,7 @@ export const getFirebaseDatabase = async (matchId): Promise<Match> => {
           roundNumber: P.number,
           createdTime: P.string,
           currentBetterIndex: P.number,
+          isSpicy: P.boolean,
           players: {},
         },
         data => {

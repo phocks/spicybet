@@ -46,6 +46,10 @@
     console.log("Connected to firebase:", firebaseApp.options.databaseURL);
     const data = await getFirebaseDatabase(matchId);
     unsubscribe = subscribeAll();
+    
+    // When registering players at the same time this can cause
+    // two players to be registered with the same index.
+    // TODO: Fix.
     registerPlayer($playerId, data.players);
   });
 
@@ -87,7 +91,6 @@
   $: numberOfRegisteredPlayers = $matchData?.players
     ? Object.keys($matchData.players).length
     : 0;
-  $: waitingForPlayers = numberOfRegisteredPlayers < 2;
   $: playerInfo = $matchData?.players ? $matchData.players[$playerId] : null;
   $: console.log("Match datastore:", $matchData);
   // $: doRoundChange($matchData?.roundNumber);
@@ -132,7 +135,7 @@
     </Heading>
   {:else if isSpectator}
     <Heading tag="h1" class="flex items-center" size="text-5xl">
-        Match is full. You are a spectator
+        Match is full. You are a spectator.
       </Heading>
       <p class="dark:text-gray-400">Match ID: {matchId}</p>
       <p class="dark:text-gray-400">...more to come</p>
@@ -143,6 +146,55 @@
     <GradientButton on:click={handleNextRound} color="purpleToBlue">
       Start match!
     </GradientButton>
+  {:else}
+  <!-- <p class="dark:text-gray-400">It's your turn to bet!</p> -->
+  <Toggle
+    bind:checked={isSpicyBet}
+    disabled={playerInfo.spicyBetBalance > 0 ? false : true}
+  >
+    {isSpicyBet ? "SPICY BET!!! (3)" : "Normal bet (1)"}
+  </Toggle>
+  <div class="bet-buttons">
+    <span>
+      <GradientButton
+        on:click={() =>
+          handleChooseSide({ betColor: "blue", spicyBet: isSpicyBet })}
+        color="blue"
+      >
+        Blue
+      </GradientButton>
+    </span>
+    <span>
+      <GradientButton
+        on:click={() =>
+          handleChooseSide({ betColor: "red", spicyBet: isSpicyBet })}
+        color="red"
+      >
+        Red
+      </GradientButton>
+    </span>
+  </div>
+  <div class="pre-bet-choice">
+    <p class="dark:text-gray-400 mb-0">Your bet choice:</p>
+    <p class="text-2xl">
+      {#if betChoice === "blue"}
+        <span class="text-blue-500">Blue</span>
+      {:else if betChoice === "red"}
+        <span class="text-red-500">Red</span>
+      {:else}
+        <span class="dark:text-gray-400">None</span>
+      {/if}
+    </p>
+  </div>
+  <div class="lock-it-in-button">
+    <GradientButton
+      on:click={() => console.log("Locking in bet...")}
+      color="redToYellow"
+      disabled={betChoice === "none"}
+    >
+      Lock it in!
+    </GradientButton>
+  </div>
   {/if}
   <!-- {#if $matchData}
     {#if numberOfRegisteredPlayers < 2}
