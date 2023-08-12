@@ -7,9 +7,16 @@
   // Firebase imports
   import { getFirebaseApp, getFirebaseDatabase } from "@utils/firebase";
 
+  const NUMBER_OF_PLAYERS = 2;
+
+  let isLoading = true;
+  let isWaitingForPlayers = true;
+  let isSpectator = true;
+  let isWaitingToStartMatch = true;
+
+
   let unsubscribe: () => void;
-  let matchState: "registering" | "waiting-to-start" | "waiting-for-bet" =
-    "registering";
+  let matchState: "loading"
   let isSpicyBet = false;
 
   // Stores
@@ -64,25 +71,32 @@
     console.log("Is spicy?", spicyBet);
   };
 
-  const doRoundChange = (roundNumber: number) => {
-    match(roundNumber)
-      .with(0, () => (matchState = "waiting-to-start"))
-      .when(
-        n => n > 0,
-        () => {
-          matchState = "waiting-for-bet";
-        }
-      );
-  };
+  // const doRoundChange = (roundNumber: number) => {
+  //   match(roundNumber)
+  //     .with(0, () => (matchState = "waiting-to-start"))
+  //     .when(
+  //       n => n > 0,
+  //       () => {
+  //         matchState = "waiting-for-bet";
+  //       }
+  //     );
+  // };
 
   $: numberOfRegisteredPlayers = $matchData?.players
     ? Object.keys($matchData.players).length
     : 0;
   $: playerInfo = $matchData?.players ? $matchData.players[$playerId] : null;
   $: console.log("Match datastore:", $matchData);
-  $: doRoundChange($matchData?.roundNumber);
+  // $: doRoundChange($matchData?.roundNumber);
   $: console.log("Is spicy bet:", isSpicyBet);
   $: console.log("Match state:", $matchData);
+
+  // View logic
+  $: isLoading = !$matchData;
+  $: isWaitingForPlayers = numberOfRegisteredPlayers < NUMBER_OF_PLAYERS;
+  $: isSpectator = !playerInfo;
+  $: isWaitingToStartMatch = $matchData?.roundNumber === 0;
+  $: console.log("playerinfo:", playerInfo);
 
   function randomIndex(n: number) {
     return Math.floor(Math.random() * n);
@@ -94,7 +108,29 @@
 </svelte:head>
 
 <div class="root">
-  {#if $matchData}
+  {#if isLoading}
+  <Heading tag="h1" class="flex items-center" size="text-5xl">
+    <Spinner />
+  </Heading>
+  {:else if isWaitingForPlayers}
+    <Heading tag="h1" class="flex items-center" size="text-5xl">
+      Waiting on other players: {2 - numberOfRegisteredPlayers}
+    </Heading>
+  {:else if isSpectator}
+    <Heading tag="h1" class="flex items-center" size="text-5xl">
+        Match is full. You are a spectator
+      </Heading>
+      <p class="dark:text-gray-400">Match ID: {matchId}</p>
+      <p class="dark:text-gray-400">...more to come</p>
+  {:else if isWaitingToStartMatch}
+    <Heading tag="h1" class="flex items-center mb-4" size="text-5xl">
+      You are player {playerInfo?.index + 1}
+    </Heading>
+    <GradientButton on:click={handleNextRound} color="purpleToBlue">
+      Start match!
+    </GradientButton>
+  {/if}
+  <!-- {#if $matchData}
     {#if numberOfRegisteredPlayers < 2}
       <Heading tag="h1" class="flex items-center" size="text-5xl">
         Waiting on other players: {2 - numberOfRegisteredPlayers}
@@ -154,7 +190,7 @@
     <Heading tag="h1" class="flex items-center" size="text-5xl">
       <Spinner />
     </Heading>
-  {/if}
+  {/if} -->
 </div>
 
 <style lang="scss">
