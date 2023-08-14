@@ -36,7 +36,6 @@ export type Player = {
   score: number;
   spicyBetBalance: number;
   currentBetColor: "blue" | "red" | "none";
-  betAmount: number;
 };
 
 export interface Players {

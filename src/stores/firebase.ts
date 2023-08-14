@@ -8,7 +8,7 @@ import {
   child,
   push,
   update,
-  increment,
+  increment
 } from "firebase/database";
 import { match, P } from "ts-pattern";
 
@@ -110,7 +110,6 @@ export const registerPlayer = async (
     score: 0,
     spicyBetBalance: 1,
     currentBetColor: "none",
-    betAmount: 1,
   };
 
   await update(ref(db, `match/${matchId.get()}/players`), {
@@ -120,12 +119,21 @@ export const registerPlayer = async (
   return true;
 };
 
-export const submitBet = async ({ betColor, spicyBet, playerId }) => {
-  const betAmount = spicyBet ? 3 : 1;
+export const submitBet = async ({ betColor, playerId }) => {
   const db = getDatabase();
+  const data = matchData.get();
+  console.log("data", data)
 
   await update(ref(db, `match/${matchId.get()}/players/${playerId}`), {
     currentBetColor: betColor,
-    betAmount: betAmount,
+    // spicyBetBalance: data[playerId].spicyBetBalance - 1,
   });
 };
+
+export const setSpicy = async (isSpicy: boolean) => {
+  const db = getDatabase();
+
+  await update(ref(db, `match/${matchId.get()}/`), {
+    isSpicy: isSpicy,
+  });
+}
