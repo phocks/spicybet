@@ -4,10 +4,9 @@
 import CenterLayout from "@layouts/Layout.astro";
 ---
 
-<!-- Do this using client side instead -->
 <script>
-  const newMatchId = "test-id"; //nanoid();
-  window.location.replace(`/match/?match=${newMatchId}`);
+  const newMatchId = "test-id"; //nanoid(); // For production
+  window.location.replace(`/lobby/?match=${newMatchId}`);
 </script>
 
 <CenterLayout title="Redirecting...">
