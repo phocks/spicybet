@@ -1,1 +1,4 @@
 plugins = ["prettier-plugin-svelte"]
+bracketSameLine = true
+arrowParens = "avoid"
+htmlWhitespaceSensitivity = "ignore"
