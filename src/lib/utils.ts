@@ -3,9 +3,6 @@ export function generatePlayer(name: string) {
     name,
     score: 0,
     spicyBetBalance: 3,
-    decSpicyBetBalance: function() {
-      this.spicyBetBalance--;
-    }
   };
 }
 
