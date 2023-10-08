@@ -1,8 +1,9 @@
 <script lang="ts">
   export let title: string;
+  export let isHighlighted: boolean = false;
 </script>
 
-<div class="box">
+<div class="box {isHighlighted ? 'is-highlighted' : ''}">
   <h1>{title}</h1>
   <div class="layout">
     <slot />
@@ -16,6 +17,10 @@
     border: 2px solid #393939;
     border-radius: 0.8rem;
     min-width: 150px;
+  }
+
+  .is-highlighted {
+    border-color: #bbb;
   }
 
   h1 {

@@ -1,21 +1,16 @@
 <script lang="ts">
-  let name: string;
-  let score: number = 0;
-  let spicyBetBalance: number = 3;
+  import type { Player } from "./types";
 
-  export const incrementScore = () => {
-    score++;
-    spicyBetBalance--;
-  };
+  export let player: Player;
 </script>
 
 <div class="info">
   <div class="key">Score:</div>
-  <div class="value">{score}</div>
+  <div class="value">{player.score}</div>
 </div>
 <div class="info">
   <div class="key">SpicyBalance:</div>
-  <div class="value">{spicyBetBalance}</div>
+  <div class="value">{player.spicyBetBalance}</div>
 </div>
 
 <style lang="scss">
