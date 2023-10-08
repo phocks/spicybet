@@ -1,26 +1,25 @@
 {
-  "name": "@example/basics",
-  "type": "module",
-  "version": "0.0.1",
+  "name": "spicybet-jdi",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
   },
-  "dependencies": {
-    "@astrojs/svelte": "^3.1.0",
-    "@astrojs/vercel": "^3.7.2",
-    "@nanostores/persistent": "^0.9.1",
-    "astro": "^2.8.2",
-    "await-to-js": "^3.0.0",
-    "firebase": "^10.0.0",
-    "nanoid": "^4.0.2",
-    "nanostores": "^0.9.3",
-    "sass": "^1.63.6",
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "@tsconfig/svelte": "^5.0.0",
     "svelte": "^4.0.5",
-    "ts-pattern": "^5.0.3"
-  }
+    "svelte-check": "^3.4.6",
+    "tslib": "^2.6.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
+    "sass": "^1.69.0"
+  },
+  "dependencies": {}
 }
