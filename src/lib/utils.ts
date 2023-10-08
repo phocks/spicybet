@@ -5,3 +5,7 @@ export function generatePlayer(name: string) {
     spicyBetBalance: 3
   };
 }
+
+export function getDiff(a: number, b: number) {
+  return Math.abs(a - b);
+}

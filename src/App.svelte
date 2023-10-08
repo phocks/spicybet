@@ -1,17 +1,17 @@
 <script lang="ts">
   import Box from "./lib/Box.svelte";
   import Player from "./lib/Player.svelte";
-  import { generatePlayer } from "./lib/utils";
+  import { generatePlayer, getDiff } from "./lib/utils";
 
   let matchRound = 1;
 
-  let player1 = generatePlayer("Player 1");
-  let player2 = generatePlayer("Player 2");
+  let p1 = generatePlayer("Player 1");
+  let p2 = generatePlayer("Player 2");
 </script>
 
 <main class="layout">
-  <Box title={player1.name}>
-    <Player player={player1} />
+  <Box title={p1.name}>
+    <Player />
   </Box>
 
   <Box title="Match stats">
@@ -19,9 +19,13 @@
       <div class="key">Round:</div>
       <div class="value">{matchRound}</div>
     </div>
+    <div class="info">
+      <div class="key">Diff:</div>
+      <div class="value">{getDiff(p1.score, p2.score)}</div>
+    </div>
   </Box>
-  <Box title={player2.name}>
-    <Player player={player1} />
+  <Box title={p2.name}>
+    <Player />
   </Box>
 </main>
 <div class="controls">
