@@ -1,16 +1,22 @@
-<script lang="ts"></script>
+<script lang="ts">
+  import Box from "./lib/Box.svelte";
+
+  let matchRound = 0;
+</script>
 
 <main class="layout">
-  <div class="box">
-    <h1>Player 1</h1>
-  </div>
-  <div class="box">
-    <h1>Match stats</h1>
-  </div>
-  <div class="box">
-    <h1>Player 2</h1>
-  </div>
+  <Box title="Player 1" />
+  <Box title="Match stats">
+    <div class="info">
+      <div class="key">Round:</div>
+      <div class="value">{matchRound}</div>
+    </div>
+  </Box>
+  <Box title="Player 2" />
 </main>
+<div class="controls">
+  <button on:click={() => matchRound++}>Next round</button>
+</div>
 
 <style lang="scss">
   .layout {
@@ -19,22 +25,35 @@
     gap: 1rem;
   }
 
-  .box {
-    background-color: #333;
-    padding: 1rem;
-    border: 2px solid #ccc;
-    border-radius: 1rem;
-  }
-
-  h1 {
-    color: #fff;
-    font-size: 1.5rem;
-    margin: 0;
-  }
-
-  @media (min-width: 55em) {
+  @media (min-width: 680px) {
     .layout {
       grid-auto-flow: column;
     }
+  }
+
+  .info {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1rem;
+  }
+
+  .key {
+    /* font-weight: bold; */
+    text-align: start;
+  }
+
+  .value {
+    text-align: end;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    min-width: 150px;
+  }
+
+  .button {
+    width: 100%;
   }
 </style>
